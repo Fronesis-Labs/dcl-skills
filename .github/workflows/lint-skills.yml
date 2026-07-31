@@ -1,0 +1,43 @@
+name: Lint skills
+
+on:
+  push:
+    paths:
+      - "skills/**"
+  pull_request:
+    paths:
+      - "skills/**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check every skill has SKILL.md with frontmatter
+        run: |
+          set -e
+          fail=0
+          for f in $(find skills -maxdepth 2 -name SKILL.md); do
+            if ! head -n1 "$f" | grep -q '^---$'; then
+              echo "::error file=$f::missing YAML frontmatter"
+              fail=1
+            fi
+            if ! grep -q '^name:' "$f"; then
+              echo "::error file=$f::missing 'name' field"
+              fail=1
+            fi
+            if ! grep -q '^description:' "$f"; then
+              echo "::error file=$f::missing 'description' field"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Warn on remaining placeholders
+        run: |
+          hits=$(grep -rl "STATUS: PLACEHOLDER" skills || true)
+          if [ -n "$hits" ]; then
+            echo "::warning::Placeholder skills still present:"
+            echo "$hits"
+          fi

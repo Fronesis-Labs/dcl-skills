@@ -1,0 +1,59 @@
+# DCL Skills
+
+Compliance and security skills for AI agents — hallucination detection, PII redaction,
+prompt-injection defense, secret-leak detection, and a DeFi/crypto-specialized variant set.
+
+Published on [ClawHub](https://clawhub.example) under [@daririnch](https://clawhub.example/daririnch).
+
+## Structure
+
+```
+dcl-skills/
+├── skills/
+│   ├── core/      # general-purpose agent-safety skills
+│   └── crypto/     # DeFi-specialized variants (wallets, trades, MEV, on-chain provenance)
+├── docs/          # pipeline design, security model, whitepaper
+├── tests/golden/  # golden-set eval cases per skill
+└── .github/workflows/lint-skills.yml
+```
+
+## Skills
+
+### Core
+
+| Skill | Purpose |
+|---|---|
+| `dcl-policy-enforcer` | Enforce compliance policy on agent actions before execution |
+| `dcl-sentinel-trace` | Detect & redact PII in agent outputs |
+| `dcl-prompt-firewall` | Detect & block prompt injection |
+| `dcl-secret-leak-detector` | Detect leaked secrets/credentials |
+| `dcl-semantic-drift-guard` | Detect hallucination / context drift vs grounding sources |
+| `dcl-pipeline` | Meta-skill orchestrating the above as one pipeline |
+
+### Crypto
+
+| Skill | Purpose |
+|---|---|
+| `dcl-prompt-firewall-crypto` | Injection defense specialized for DeFi contexts |
+| `dcl-wallet-guardian` | Validate wallet-affecting actions before execution |
+| `dcl-trade-verifier` | Verify trade/swap parameters before execution |
+| `dcl-mev-compliance` | Check MEV exposure / compliance before broadcast |
+| `dcl-provenance-tracker-crypto` | Verify provenance of on-chain data/contracts referenced |
+| `dcl-semantic-drift-crypto` | Crypto-specific hallucination detection (token/contract claims) |
+| `dcl-output-sanitizer` | Sanitize agent output before display/execution |
+| `dcl-crypto-commit` | Final compliance checkpoint before irreversible on-chain action |
+
+## Paid audit (x402)
+
+Some skills (currently: `dcl-policy-enforcer`, and others noted per-skill) offer a paid,
+live compliance audit via an x402 MCP server, with a free manual-review fallback when
+payment/auth isn't available. See each skill's `SKILL.md` for details.
+
+## Contributing / status
+
+Each `SKILL.md` under `skills/` currently contains a placeholder — see
+[docs/pipeline.md](docs/pipeline.md) for migration status from ClawHub.
+
+## License
+
+See [LICENSE](LICENSE).

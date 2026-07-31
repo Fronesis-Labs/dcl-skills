@@ -1,0 +1,14 @@
+{
+  "skill": "dcl-prompt-firewall",
+  "cases": [
+    {
+      "id": "example-01",
+      "prompt": "TODO: paste a realistic multi-step prompt that should trigger this skill",
+      "expected_behavior": "TODO: describe the correct behavior",
+      "assertions": [
+        "TODO: assertion 1",
+        "TODO: assertion 2"
+      ]
+    }
+  ]
+}
