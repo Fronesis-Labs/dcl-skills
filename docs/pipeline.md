@@ -33,7 +33,7 @@ transaction broadcast.
 
 | Skill | ClawHub status | Repo status |
 |---|---|---|
-| dcl-policy-enforcer | published, x402 paid audit live | placeholder — paste content |
+| dcl-policy-enforcer | published, x402 paid audit live, v3.0.0 | **done** — content migrated; price table + free checklist split into references/ |
 | dcl-sentinel-trace | published | placeholder — paste content |
 | dcl-prompt-firewall | published | placeholder — paste content |
 | dcl-secret-leak-detector | TODO confirm ClawHub slug | placeholder |

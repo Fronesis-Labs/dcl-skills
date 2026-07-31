@@ -42,3 +42,17 @@ x402 MCP flow) should be reviewed before/after publishing:
 - TODO: re-read the wording in each x402-enabled `SKILL.md` before
   publishing/republishing and adjust if it reads as pricing metadata rather
   than a description of an external paid API the skill happens to call.
+
+### Confirmed case: dcl-policy-enforcer
+
+The version ClawHub accepted for `dcl-policy-enforcer` includes a literal
+per-tool USD price table (`dcl_evaluate_fast` — $0.01, `dcl_evaluate_strict`
+— $0.05, etc.) directly in `SKILL.md`, and it was published without issue.
+This is a real discrepancy against ClawHub's stated policy of no pricing
+metadata in `SKILL.md`. Possible explanations: the scanner only flags
+structured pricing fields (not markdown tables), or this is simply an
+enforcement gap. Either way, treat it as unconfirmed-safe rather than
+policy-compliant — it could be caught in a future re-scan. In this repo, the
+price table lives in `references/mcp-tools.md` (loaded on demand) rather
+than the main `SKILL.md` body, partly to keep it less prominent in the
+primary ClawHub listing view if/when you re-publish from this source.
