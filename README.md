@@ -56,4 +56,4 @@ Each `SKILL.md` under `skills/` currently contains a placeholder — see
 
 ## License
 
-See [LICENSE](LICENSE).
+Apache License 2.0 — see [LICENSE](LICENSE).

@@ -39,4 +39,5 @@ transaction broadcast.
 | dcl-secret-leak-detector | TODO confirm ClawHub slug | placeholder |
 | dcl-semantic-drift-guard | published as "DCL Semantic Drift Guard" | placeholder — paste content |
 | dcl-pipeline | new (repo-only meta-skill) | placeholder |
-| crypto/* | new, being written from site content | placeholder |
+| crypto/dcl-output-sanitizer | published (Fronesis Labs / Leibniz Layer) | **done** — content migrated, scenarios+integration split into references/ |
+| crypto/* (rest) | new, being written from site content | placeholder |
