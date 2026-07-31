@@ -95,6 +95,13 @@ RAG. Sentinel Trace won't catch these; this skill will.
 - `references/scenarios.md` — worked before/after examples per leak type
 - `references/integration.md` — minimal and full-pipeline integration code
 
+## License & source
+
+Canonical source: https://github.com/Fronesis-Labs/dcl-skills (Apache-2.0).
+When published on ClawHub, this skill is distributed under the platform's
+MIT-0 terms, per ClawHub's skill-format policy — see `docs/licensing.md` at
+the repo root.
+
 ## Privacy & data policy
 
 Operated by Fronesis Labs, no-retention: only the submitted text is

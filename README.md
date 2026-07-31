@@ -56,4 +56,8 @@ Each `SKILL.md` under `skills/` currently contains a placeholder — see
 
 ## License
 
-Apache License 2.0 — see [LICENSE](LICENSE).
+- **This repo**: Apache License 2.0 — see [LICENSE](LICENSE).
+- **ClawHub listings**: platform-enforced MIT-0, cannot be overridden per skill.
+
+See [docs/licensing.md](docs/licensing.md) for the full breakdown, including
+an open item on x402/paid-audit wording vs ClawHub's no-pricing-metadata rule.
