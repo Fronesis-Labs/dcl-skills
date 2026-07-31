@@ -1,33 +1,97 @@
 ---
 name: dcl-prompt-firewall
-description: Detects and blocks prompt injection attempts embedded in tool outputs, documents, or web content before the agent acts on them. Use this skill whenever the user's request touches this specific check, even if not explicitly named.
+description: >
+  Use this skill to run a real, paid input-layer screen for prompt injection,
+  jailbreak, role-switch, and instruction-override attempts via the live DCL
+  Trust Oracle MCP server — before untrusted input ever reaches the model.
+  Every paid call is metered and settled on-chain via the x402 protocol
+  (USDC on Base) and produces a tamper-evident audit record. Use whenever an
+  agent receives user-supplied or external input (user messages, tool
+  results, web content, retrieved documents) and you need a pre-execution
+  gate, or want a free instruction-only checklist for a quick manual review.
+  Part of the Leibniz Layer Security Suite alongside DCL Policy Enforcer and
+  DCL Sentinel Trace.
 ---
 
-# dcl-prompt-firewall
+# DCL Prompt Firewall — Leibniz Layer
 
-> STATUS: PLACEHOLDER — replace this file with your published ClawHub SKILL.md content.
-> Source of truth for now: ClawHub profile @daririnch -> Skills.
+**Publisher:** Fronesis Labs · **Version:** 3.0.0 · **Part of:** Leibniz Layer Security Suite
+**MCP endpoint:** `https://mcp.fronesislabs.com/mcp`
 
 ## What this skill does
 
-Detects and blocks prompt injection attempts embedded in tool outputs, documents, or web content before the agent acts on them.
+Screens incoming, untrusted input — user messages, tool results, retrieved
+documents, web content — for injection, jailbreak, and instruction-override
+patterns *before* it reaches the model. Calls the DCL Trust Oracle and
+returns a verdict (`COMMIT` / `NO_COMMIT`), a confidence score, and a
+cryptographic audit record (`tx_hash`) written to a tamper-evident,
+hash-chained log that stores only a hash of the input — never the raw text.
 
 ## When to trigger
 
-- TODO: list explicit trigger phrases / contexts (copy from your ClawHub listing tags: #security)
+- An agent receives user-supplied or external input before passing it to an LLM
+- Pipeline is exposed to jailbreak, role-switch, or instruction-override attempts
+- Building a multi-agent system where one agent's output becomes another's input
+- Need a pre-execution audit trail alongside DCL Policy Enforcer's post-output checks
+- Want a free, no-network manual review instead → use the checklist
 
-## Instructions
+## This skill calls a live, paid service (v3.0.0+)
 
-TODO: paste the workflow steps from the current ClawHub skill body here.
+Core screen runs on Fronesis Labs' **DCL Trust Oracle** MCP server, metered
+and settled on-chain via **x402 in USDC on Base**. No subscription, no
+account — pay per call.
 
-## Bundled resources
+Full tool list, prices, connection config, call examples:
+`references/mcp-tools.md`.
 
-- `references/` — put any detailed reference docs here (policy tables, threat taxonomies, API schemas)
-- `examples/` — put a few worked input/output examples here for eval + onboarding
+Free, no-network manual checklist: `references/free-checklist.md`.
 
-## x402 / paid audit (if applicable)
+## Where this fits in the pipeline
 
-TODO: if this skill calls the paid x402 MCP live-audit server, document here:
-- server endpoint
-- what triggers a paid call vs the free manual fallback
-- what happens if payment/auth fails (must degrade gracefully, never fail silently)
+```
+Untrusted input
+        │
+        ▼
+DCL Prompt Firewall        ← this skill (live paid check, or free checklist)
+        │ COMMIT
+        ▼
+      LLM
+        │
+        ▼
+DCL Policy Enforcer        ← compliance check on output
+        │ COMMIT
+        ▼
+DCL Sentinel Trace         ← PII redaction
+        │ COMMIT
+        ▼
+DCL Secret Leak Detector   ← credential scan
+        │ COMMIT
+        ▼
+DCL Semantic Drift Guard   ← hallucination check
+        │ IN_COMMIT
+        ▼
+Safe to deliver
+```
+
+## Further reading
+
+- `references/mcp-tools.md` — tool list, prices, connection config, call examples, output shape
+- `references/free-checklist.md` — manual no-network review checklist (P1–P8)
+
+## Privacy & data policy
+
+Operated by Fronesis Labs. For the live tool: only a hash of the screened
+text (`input_hash`) and verdict metadata are written to the audit chain —
+raw input never stored. For the free checklist: everything runs inside the
+agent's own context.
+
+Full policy: https://fronesislabs.com/#privacy · Suite:
+https://hub.fronesislabs.com · Contact: support@fronesislabs.com
+
+## Related skills
+
+- `dcl-policy-enforcer` — post-output compliance and content-quality check
+- `dcl-sentinel-trace` — PII redaction
+- `dcl-secret-leak-detector` — credential and API key scan
+- `dcl-semantic-drift-guard` — hallucination and grounding check
+- `dcl-skill-auditor` — pre-install scanner for ClawHub skills
