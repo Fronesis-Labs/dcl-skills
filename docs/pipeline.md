@@ -1,28 +1,35 @@
 # Pipeline
 
-How the core skills chain together via `dcl-pipeline` (meta-skill):
+How the core skills chain together via `dcl-pipeline` (meta-skill) — this is
+the canonical order, matching every individual skill's own pipeline diagram:
 
 ```
 input / tool output
       │
       ▼
-dcl-prompt-firewall     — block injection payloads
+dcl-prompt-firewall      — block injection payloads (runs on input, before the model)
       │
       ▼
-dcl-secret-leak-detector — strip leaked credentials
+   [ LLM call ]
+      │
+      ▼
+dcl-policy-enforcer      — jailbreak / safety / regulatory-pattern check on output
       │
       ▼
 dcl-sentinel-trace       — redact PII
       │
       ▼
-dcl-semantic-drift-guard — flag hallucination vs grounding
+dcl-secret-leak-detector — strip leaked credentials
       │
       ▼
-dcl-policy-enforcer      — final policy check (paid x402 audit or free manual)
+dcl-semantic-drift-guard — flag hallucination vs grounding
       │
       ▼
    output
 ```
+
+See `skills/core/dcl-pipeline/SKILL.md` for the orchestration logic (mode
+per stage, fail-verdict handling, aggregated report format).
 
 Crypto variants (`skills/crypto/`) slot in the same positions when the agent
 is acting on-chain, with `dcl-wallet-guardian`, `dcl-trade-verifier`,
@@ -40,7 +47,7 @@ transaction broadcast.
 | dcl-provenance-tracker | published (new folder, not in original scaffold) | **done** — content migrated; checklist, schema, cross-check split into references/ |
 | dcl-semantic-drift-guard | published as "DCL Semantic Drift Guard" | **done** — content migrated; schema/workflow + optional precheck split into references/ |
 | dcl-skill-auditor | published (new folder, not in original scaffold) | **done** — content migrated; checklist + output-schema split into references/ |
-| dcl-pipeline | new (repo-only meta-skill) | placeholder |
+| dcl-pipeline | new (repo-only meta-skill) | **done** — orchestration logic written; stage detail + worked example split into references/examples |
 | crypto/dcl-output-sanitizer | published (Fronesis Labs / Leibniz Layer) | **done** — content migrated, scenarios+integration split into references/ |
 | crypto/dcl-wallet-guardian | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern (matches dcl-policy-enforcer/dcl-prompt-firewall) instead of the webhook pattern; tool name `dcl_evaluate_wallet` is inferred by analogy to sibling tools, not confirmed from a source doc — verify against real MCP server |
 | crypto/dcl-prompt-firewall-crypto | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_evaluate_jailbreak_crypto` inferred by analogy |
