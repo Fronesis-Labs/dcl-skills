@@ -57,4 +57,5 @@ transaction broadcast.
 | crypto/dcl-provenance-tracker-crypto | published, source was thin (webhook-only) | **done** — rebuilt as instruction-only local diff (matches core dcl-provenance-tracker design) + optional on-chain cross-check via existing `dcl_audit_decode`/`dcl_audit_decode_deep` tools |
 | crypto/dcl-crypto-commit | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_commit` inferred by analogy; flagged as having no meaningful free alternative |
 | crypto/dcl-output-sanitizer (2nd upload, shorter) | duplicate of already-migrated version | skipped — existing richer version already in repo |
-| crypto/* (rest) | new, being written from site content | placeholder |
+
+All 16 skills are migrated. Nothing left in `placeholder` state.

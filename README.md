@@ -3,7 +3,7 @@
 Compliance and security skills for AI agents — hallucination detection, PII redaction,
 prompt-injection defense, secret-leak detection, and a DeFi/crypto-specialized variant set.
 
-Published on [ClawHub](https://clawhub.example) under [@daririnch](https://clawhub.example/daririnch).
+Published on [ClawHub](https://clawhub.ai/daririnch) under [@daririnch](https://clawhub.ai/daririnch).
 
 ## Structure
 
@@ -47,14 +47,25 @@ dcl-skills/
 
 ## Paid audit (x402)
 
-Some skills (currently: `dcl-policy-enforcer`, and others noted per-skill) offer a paid,
-live compliance audit via an x402 MCP server, with a free manual-review fallback when
-payment/auth isn't available. See each skill's `SKILL.md` for details.
+Most skills offer a real, paid live check via an x402 MCP server (USDC on
+Base) — jailbreak/injection detection, PII/secret scans, MEV/trade
+compliance, wallet-data protection, and more — each with a free
+instruction-only checklist fallback when payment/auth isn't available or
+you'd rather not make a network call. `dcl-crypto-commit` is the one
+exception with no free equivalent, since its whole purpose is writing to
+the on-chain audit chain. `dcl-provenance-tracker` and
+`dcl-provenance-tracker-crypto` are the other exception — 100%
+instruction-only by design, with only an *optional* on-chain cross-check of
+a prior record. See each skill's `SKILL.md` for details.
 
-## Contributing / status
+## Status
 
-Each `SKILL.md` under `skills/` currently contains a placeholder — see
-[docs/pipeline.md](docs/pipeline.md) for migration status from ClawHub.
+All 16 `SKILL.md` files under `skills/` (8 core + 8 crypto) have been
+migrated from ClawHub and are complete — see
+[docs/pipeline.md](docs/pipeline.md) for the per-skill migration log,
+including notes on which MCP tool names/prices were inferred by analogy
+rather than confirmed from a source doc (mainly the crypto suite, which
+started from thin ClawHub listings).
 
 ## License
 
