@@ -28,6 +28,7 @@ dcl-skills/
 | `dcl-prompt-firewall` | Detect & block prompt injection |
 | `dcl-secret-leak-detector` | Detect leaked secrets/credentials |
 | `dcl-provenance-tracker` | Verify skill version integrity / detect supply-chain drift after updates |
+| `dcl-skill-auditor` | Pre-install static security scanner for ClawHub skills |
 | `dcl-semantic-drift-guard` | Detect hallucination / context drift vs grounding sources |
 | `dcl-pipeline` | Meta-skill orchestrating the above as one pipeline |
 

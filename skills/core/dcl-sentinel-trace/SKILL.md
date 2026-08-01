@@ -1,33 +1,116 @@
 ---
 name: dcl-sentinel-trace
-description: Detects and redacts personally identifiable information (PII) in AI/agent outputs before they leave the pipeline. Use this skill whenever the user's request touches this specific check, even if not explicitly named.
+description: >
+  Detect and redact personally identifiable information in AI outputs before
+  they reach users or downstream systems — emails, phones, national IDs,
+  bank cards, IBANs, crypto addresses, IPs, passports. Runs as a free
+  instruction-only checklist, or as a real, paid regex scan (with a Luhn
+  checksum on card numbers) via the live DCL Trust Oracle MCP server
+  (Leibniz Layer protocol), settled on-chain via x402 (USDC on Base). Part
+  of the DCL Skills security suite by Fronesis Labs.
 ---
 
-# dcl-sentinel-trace
+# DCL Sentinel Trace — Leibniz Layer
 
-> STATUS: PLACEHOLDER — replace this file with your published ClawHub SKILL.md content.
-> Source of truth for now: ClawHub profile @daririnch -> Skills.
+**Publisher:** Fronesis Labs · **Version:** 3.0.0 · **Part of:** DCL Skills Security Suite
+**MCP endpoint:** `https://mcp.fronesislabs.com/mcp`
 
 ## What this skill does
 
-Detects and redacts personally identifiable information (PII) in AI/agent outputs before they leave the pipeline.
+Detects and redacts personally identifiable information in AI outputs
+before they reach users or downstream systems.
+
+Two modes, same 8 categories (T1–T8):
+
+1. **Free, instruction-only** — the agent works through the checklist
+   itself, entirely inside its own context. No network call, no charge.
+2. **Paid, live** — same categories, run as real regex (plus a Luhn
+   checksum on card numbers to cut false positives) against the live DCL
+   Trust Oracle MCP server, settled on-chain via x402, returning a
+   cryptographic `tx_hash` seal.
+
+Close one-to-one match: the live tool implements the same categories
+documented here. Use free mode for manual/offline review; use live mode for
+an independently verifiable, on-chain-anchored proof of the scan.
+
+### What gets detected
+
+| Category | Examples |
+|---|---|
+| `email` | Any email address pattern |
+| `phone` | International format numbers (with country code) |
+| `national_id` | US-style SSN pattern (`###-##-####`) |
+| `bank_card` | Card PANs, verified with a Luhn checksum to reduce false positives |
+| `iban` | International bank account numbers |
+| `crypto_address` | Bitcoin and Ethereum wallet address formats |
+| `ip_address` | IPv4 and IPv6 addresses |
+| `passport` | Passport/document numbers appearing in explicit passport context |
 
 ## When to trigger
 
-- TODO: list explicit trigger phrases / contexts (copy from your ClawHub listing tags: #security)
+- AI output may contain personal data from user input, documents, or retrieved content
+- A coding or data agent processes datasets that may contain real PII
+- Need a privacy checkpoint before logging or storing AI outputs
 
-## Instructions
+## Live tool & free checklist
 
-TODO: paste the workflow steps from the current ClawHub skill body here.
+Full tool details, prices, connection config, call examples:
+`references/mcp-tools.md`.
 
-## Bundled resources
+Free, no-network manual checklist (T1–T8): `references/free-checklist.md`.
 
-- `references/` — put any detailed reference docs here (policy tables, threat taxonomies, API schemas)
-- `examples/` — put a few worked input/output examples here for eval + onboarding
+## vs DCL Secret Leak Detector
 
-## x402 / paid audit (if applicable)
+Complementary, not competing — run both.
 
-TODO: if this skill calls the paid x402 MCP live-audit server, document here:
-- server endpoint
-- what triggers a paid call vs the free manual fallback
-- what happens if payment/auth fails (must degrade gracefully, never fail silently)
+| | DCL Sentinel Trace | DCL Secret Leak Detector |
+|---|---|---|
+| Focus | Personal identity data | Technical credentials |
+| Catches | Emails, phones, national IDs, IBANs, card PANs | API keys, tokens, private keys, DB URLs |
+| Primary risk | Privacy breach | Security breach / credential compromise |
+| Live tool | `dcl_evaluate_pii` ($0.02) | `dcl_evaluate_secrets` ($0.02) |
+
+A response can be free of credentials and still expose personal data.
+
+## Where this fits in the pipeline
+
+```
+Untrusted input
+        │
+        ▼
+DCL Prompt Firewall        ← blocks malicious input
+        │ COMMIT
+        ▼
+      LLM
+        │
+        ▼
+DCL Policy Enforcer        ← policy check on output
+        │ COMMIT
+        ▼
+DCL Sentinel Trace         ← this skill — PII redaction
+        │ COMMIT
+        ▼
+DCL Secret Leak Detector   ← credential scan
+        │ COMMIT
+        ▼
+DCL Semantic Drift Guard   ← hallucination check
+        │ IN_COMMIT
+        ▼
+Safe to deliver
+```
+
+## Privacy & data policy
+
+Operated by Fronesis Labs. Free checklist is 100% instruction-only. For the
+live tool: only `input_hash` and finding metadata are written to the
+on-chain audit trail; raw text and detected personal data never stored
+server-side. Only redacted samples ever appear in output.
+
+Full policy: https://fronesislabs.com/#privacy · Questions: support@fronesislabs.com
+
+## Related skills
+
+- `dcl-secret-leak-detector` — credential and API key scan
+- `dcl-prompt-firewall` — input-layer injection and jailbreak detection
+- `dcl-policy-enforcer` — policy and jailbreak detection for AI outputs
+- `dcl-semantic-drift-guard` — hallucination and grounding check

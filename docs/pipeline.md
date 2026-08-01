@@ -34,11 +34,12 @@ transaction broadcast.
 | Skill | ClawHub status | Repo status |
 |---|---|---|
 | dcl-policy-enforcer | published, x402 paid audit live, v3.0.0 | **done** — content migrated; price table + free checklist split into references/ |
-| dcl-sentinel-trace | published | placeholder — paste content |
+| dcl-sentinel-trace | published | **done** — content migrated; checklist + mcp-tools split into references/ |
 | dcl-prompt-firewall | published | **done** — content migrated; checklist + mcp-tools split into references/ |
 | dcl-secret-leak-detector | published | **done** — content migrated; checklist + mcp-tools split into references/ |
 | dcl-provenance-tracker | published (new folder, not in original scaffold) | **done** — content migrated; checklist, schema, cross-check split into references/ |
-| dcl-semantic-drift-guard | published as "DCL Semantic Drift Guard" | placeholder — paste content |
+| dcl-semantic-drift-guard | published as "DCL Semantic Drift Guard" | **done** — content migrated; schema/workflow + optional precheck split into references/ |
+| dcl-skill-auditor | published (new folder, not in original scaffold) | **done** — content migrated; checklist + output-schema split into references/ |
 | dcl-pipeline | new (repo-only meta-skill) | placeholder |
 | crypto/dcl-output-sanitizer | published (Fronesis Labs / Leibniz Layer) | **done** — content migrated, scenarios+integration split into references/ |
 | crypto/* (rest) | new, being written from site content | placeholder |
