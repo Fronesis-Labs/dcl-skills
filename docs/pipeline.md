@@ -42,4 +42,5 @@ transaction broadcast.
 | dcl-skill-auditor | published (new folder, not in original scaffold) | **done** — content migrated; checklist + output-schema split into references/ |
 | dcl-pipeline | new (repo-only meta-skill) | placeholder |
 | crypto/dcl-output-sanitizer | published (Fronesis Labs / Leibniz Layer) | **done** — content migrated, scenarios+integration split into references/ |
+| crypto/dcl-wallet-guardian | published, but source was very thin (endpoint + bullet list only) | **done** — upgraded to house style; response schema mirrored from dcl-output-sanitizer (same `/evaluate` endpoint, different `policy` value) — verify this assumption against the real backend |
 | crypto/* (rest) | new, being written from site content | placeholder |
