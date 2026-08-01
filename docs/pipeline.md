@@ -43,4 +43,11 @@ transaction broadcast.
 | dcl-pipeline | new (repo-only meta-skill) | placeholder |
 | crypto/dcl-output-sanitizer | published (Fronesis Labs / Leibniz Layer) | **done** — content migrated, scenarios+integration split into references/ |
 | crypto/dcl-wallet-guardian | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern (matches dcl-policy-enforcer/dcl-prompt-firewall) instead of the webhook pattern; tool name `dcl_evaluate_wallet` is inferred by analogy to sibling tools, not confirmed from a source doc — verify against real MCP server |
+| crypto/dcl-prompt-firewall-crypto | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_evaluate_jailbreak_crypto` inferred by analogy |
+| crypto/dcl-trade-verifier | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_evaluate_trade` inferred by analogy |
+| crypto/dcl-mev-compliance | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_evaluate_mev` inferred by analogy |
+| crypto/dcl-semantic-drift-crypto | published, source was thin (webhook-only) | **done** — rebuilt with live paid pre-check (`dcl_evaluate_signal`, inferred) + free local grounding workflow, mirroring core dcl-semantic-drift-guard's two-mode design |
+| crypto/dcl-provenance-tracker-crypto | published, source was thin (webhook-only) | **done** — rebuilt as instruction-only local diff (matches core dcl-provenance-tracker design) + optional on-chain cross-check via existing `dcl_audit_decode`/`dcl_audit_decode_deep` tools |
+| crypto/dcl-crypto-commit | published, source was thin (webhook-only) | **done** — rebuilt on MCP+x402 pattern; tool `dcl_commit` inferred by analogy; flagged as having no meaningful free alternative |
+| crypto/dcl-output-sanitizer (2nd upload, shorter) | duplicate of already-migrated version | skipped — existing richer version already in repo |
 | crypto/* (rest) | new, being written from site content | placeholder |
