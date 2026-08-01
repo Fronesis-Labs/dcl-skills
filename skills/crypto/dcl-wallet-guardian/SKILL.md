@@ -1,23 +1,44 @@
 ---
 name: dcl-wallet-guardian
-description: Masks seed phrases, private keys, mnemonics, and wallet addresses before they reach any LLM context window, and re-scans agent output before delivery. Detects accidental exposure of sensitive self-custody data in prompts, agent outputs, or RAG-retrieved content. Use whenever an agent handles wallet setup, key management, transaction signing, or any DeFi workflow where a user or retrieved document might contain a seed phrase, private key, or wallet address. GDPR and HIPAA compatible. Part of the DCL Crypto Suite alongside DCL Trade Verifier and DCL Output Sanitizer.
+description: >
+  Use this skill to run a real, paid scan for seed phrases, private keys,
+  wallet addresses, and wallet-context API credentials via the live DCL
+  Trust Oracle MCP server — before sensitive self-custody data reaches an
+  LLM context window or leaves it in a response. Every paid call is metered
+  and settled on-chain via the x402 protocol (USDC on Base) and produces a
+  tamper-evident audit record. Use whenever an agent handles wallet setup,
+  key management, transaction signing, or any DeFi workflow where a user or
+  retrieved document might contain a seed phrase, private key, or wallet
+  address — or want a free instruction-only checklist for a quick manual
+  review. GDPR and HIPAA compatible. Part of the DCL Crypto Suite alongside
+  DCL Trade Verifier and DCL Output Sanitizer.
 ---
 
 # DCL Wallet Guardian — Leibniz Layer
 
-Cryptographic pre/post-processing checkpoint specialized for wallet and
-self-custody data. It intercepts text — inbound user input, retrieved
-documents, or an agent's own response — and strips seed phrases, private
-keys, wallet addresses, and wallet-context credentials before they persist
-anywhere.
+**Publisher:** Fronesis Labs · **Version:** 3.0.0 · **Part of:** DCL Crypto Suite
+**MCP endpoint:** `https://mcp.fronesislabs.com/mcp`
+
+## What this skill does
+
+Scans text — inbound user input, retrieved documents, or an agent's own
+response — for seed phrases, private keys, wallet addresses, and
+wallet-context credentials. Calls the DCL Trust Oracle and returns a verdict
+(`COMMIT` / `NO_COMMIT`), a confidence score, and a cryptographic audit
+record (`tx_hash`) written to a tamper-evident, hash-chained log that stores
+only a hash of the input — never the raw text.
+
+A **free, instruction-only checklist** is also available for a manual,
+no-payment, no-network-call review — see `references/free-checklist.md`.
 
 ## When to trigger
 
 - An agent handles wallet setup, key import, or recovery-phrase workflows
 - A signing or transaction-broadcast agent may echo a private key in its reasoning or output
-- A RAG pipeline retrieves internal docs (runbooks, configs) that may contain treasury addresses or credentials
+- A RAG pipeline retrieves internal docs that may contain treasury addresses or credentials
 - A tool-calling agent authenticates to a wallet/custody API and could reproduce the token
-- You want a pre-context gate (before the LLM sees sensitive input) as well as a pre-delivery gate (before the response goes out)
+- Want a pre-context gate (before the LLM sees sensitive input) as well as a pre-delivery gate (before the response goes out)
+- Want a free, no-network manual review instead → use the checklist
 
 ## What gets detected
 
@@ -28,69 +49,57 @@ anywhere.
 | `wallet_address` | ETH addresses, BTC addresses (`bc1...`, `1...`, `3...`) |
 | `wallet_api_credential` | API keys and bearer tokens appearing in a wallet/custody context |
 
-## How to use
+## This skill calls a live, paid service (v3.0.0+)
 
-```bash
-curl -s -X POST https://webhook.fronesislabs.com/evaluate \
-  -H "Content-Type: application/json" \
-  -d '{"response": "<TEXT TO SCAN>", "policy": "wallet_guardian", "agent_id": "optional"}'
-```
+The core scan runs on Fronesis Labs' **DCL Trust Oracle** MCP server — a real
+backend, not a local simulation. Each paid tool call is metered and settled
+on-chain via the **x402 protocol in USDC on the Base network**. No
+subscription, no account — the calling agent (or its wallet-enabled MCP
+client) pays per call.
 
-Call this on any text before it enters the model's context (inbound) and
-again on the raw model response before delivery (outbound). If
-`sanitized_output` is present in the response, use that instead of the
-original.
+Full tool details, prices, connection config, call examples, output shape:
+`references/mcp-tools.md`.
 
-### Verdicts
-
-| Verdict / field | Meaning |
-|---|---|
-| `COMMIT` | Clean — safe to use as-is |
-| `NO_COMMIT` | Sensitive wallet data detected — use `sanitized_output` instead |
-| `sanitized_output` | Cleaned text with sensitive data redacted |
-| `redactions` | What was found and redacted (type, position, masked sample) |
-| `redaction_count` | Total items removed |
-| `risk_score` | 0.0–1.0 composite severity |
-| `tx_hash` / `chain_hash` | Tamper-evident audit-chain proof of this check |
-
-Example clean response:
-
-```json
-{"verdict": "COMMIT", "confidence": 0.98, "violations": [], "sanitized_output": null, "redaction_count": 0, "risk_score": 0.02}
-```
-
-Example sanitized response:
-
-```json
-{"verdict": "NO_COMMIT", "violations": ["seed_phrase"], "sanitized_output": "My seed phrase is: [REDACTED — SEED_PHRASE], and the tx still fails.", "redaction_count": 1, "risk_score": 0.95}
-```
-
-### Additional endpoints
-
-```bash
-GET https://webhook.fronesislabs.com/policies          # list all policies
-GET https://webhook.fronesislabs.com/chain/tail?n=5     # audit-chain tail for tamper verification
-GET https://webhook.fronesislabs.com/health             # health check
-```
+If you'd rather not make a paid call, use the free checklist instead:
+`references/free-checklist.md`.
 
 ## Where this fits
 
 Runs at **both ends** of a wallet-adjacent interaction — before sensitive
-input reaches the model, and again before the response is delivered. See
-`references/integration.md` for the full position diagram alongside
-`dcl-output-sanitizer`.
+input reaches the model, and again before the response is delivered:
+
+```
+User input / retrieved doc
+        │
+        ▼
+DCL Wallet Guardian     ← strip seed phrases / private keys / addresses
+        │ COMMIT
+        ▼
+      LLM / agent
+        │
+        ▼
+DCL Wallet Guardian     ← re-run on output before delivery
+        │ COMMIT
+        ▼
+DCL Output Sanitizer    ← general secrets/PII/toxic sweep
+        │ COMMIT
+        ▼
+Safe to deliver
+```
 
 ## Further reading
 
-- `references/scenarios.md` — worked before/after examples per exposure type
-- `references/integration.md` — minimal integration snippet and pipeline position
+- `references/mcp-tools.md` — tool details, prices, connection config, call examples, output shape
+- `references/free-checklist.md` — manual no-network review checklist (W1–W4)
+- `references/scenarios.md` — illustrative exposure patterns this skill catches
 
 ## Privacy & data policy
 
-Operated by Fronesis Labs under a strict no-retention data policy. Only the
-text submitted for scanning is processed, in-memory, nothing written to
-disk or logged. Detected secrets are returned as masked samples only — raw
-values are never stored or logged.
+Operated by Fronesis Labs. For the live tool: only a hash of the scanned
+text (`input_hash`) and verdict metadata are written to the audit chain —
+raw text and any real key/seed values are never stored. For the free
+checklist: everything runs inside the agent's own context; nothing is
+transmitted anywhere.
 
 Full policy: https://fronesislabs.com/#privacy · Suite:
 https://hub.fronesislabs.com · Contact: support@fronesislabs.com
