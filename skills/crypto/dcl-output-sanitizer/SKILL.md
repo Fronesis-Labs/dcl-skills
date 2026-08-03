@@ -31,15 +31,20 @@ never reach the user unscreened.
 | `pii` | Emails, phone numbers, national IDs, SSNs, passport numbers, card PANs, IBANs |
 | `crypto` | Bitcoin/Ethereum addresses, private seed phrases |
 | `network` | Internal IPs, non-public hostnames, internal URLs, MAC addresses |
-| `toxic` | Hate speech, explicit content, self-harm instructions, targeted harassment |
+| `toxic` | Narrow, high-precision safety net: direct self-harm instruction-seeking and targeted harassment phrasing. Not a general hate-speech/toxicity classifier — regex is the wrong tool for that. |
 | `unsafe_instructions` | Shell-executable commands, SQL injection fragments, path traversal sequences |
 
 ## How to use
 
-```bash
-curl -s -X POST https://webhook.fronesislabs.com/evaluate \
-  -H "Content-Type: application/json" \
-  -d '{"response": "<RAW LLM OUTPUT TO SANITIZE>", "policy": "output_sanitizer", "agent_id": "optional"}'
+Call the live MCP tool `dcl_evaluate_output_sanitizer` (paid, $0.02, USDC on
+Base via x402) — see `references/mcp-tools.md` for the connection details,
+full output schema, and a worked example. In short:
+
+```python
+result = dcl_evaluate_output_sanitizer(
+    response="<RAW LLM OUTPUT TO SANITIZE>",
+    agent_id="optional",
+)
 ```
 
 Always call this on the raw model response **before** returning it downstream.
@@ -53,29 +58,21 @@ original.
 | `COMMIT` | Output is clean — safe to deliver as-is |
 | `NO_COMMIT` | Sensitive content detected — use `sanitized_output` instead |
 | `sanitized_output` | Cleaned response with sensitive content redacted |
-| `redactions` | What was found and redacted (type, position, masked sample) |
+| `findings` | What was found and redacted (type, position, severity, category, masked sample) |
 | `redaction_count` | Total items removed |
 | `risk_score` | 0.0–1.0 composite severity |
-| `tx_hash` / `chain_hash` | Tamper-evident audit-chain proof of this sanitization event |
+| `tx_hash` / `chain_index` | Tamper-evident audit-chain proof of this sanitization event |
 
 Example clean response:
 
 ```json
-{"verdict": "COMMIT", "confidence": 0.98, "violations": [], "sanitized_output": null, "redaction_count": 0, "risk_score": 0.02}
+{"verdict": "COMMIT", "confidence": 0.98, "violations": [], "sanitized_output": null, "redaction_count": 0, "risk_score": 0.0}
 ```
 
 Example sanitized response:
 
 ```json
 {"verdict": "NO_COMMIT", "violations": ["api_key", "internal_ip"], "sanitized_output": "Endpoint: [REDACTED] · Key: [REDACTED]", "redaction_count": 2, "risk_score": 0.76}
-```
-
-### Additional endpoints
-
-```bash
-GET https://webhook.fronesislabs.com/policies          # list all policies
-GET https://webhook.fronesislabs.com/chain/tail?n=5     # audit-chain tail for tamper verification
-GET https://webhook.fronesislabs.com/health             # health check
 ```
 
 ## Where this fits in the pipeline
