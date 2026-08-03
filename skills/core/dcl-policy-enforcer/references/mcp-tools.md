@@ -3,7 +3,7 @@
 | MCP tool | Price | What it runs |
 |---|---|---|
 | `dcl_evaluate_fast` | $0.01 | Quick check against the server's default policy |
-| `dcl_evaluate_strict` | $0.05 | Same default policy, higher confidence bar |
+| `dcl_evaluate_strict` | $0.05 | Broader **strict** policy — union of default + anti-jailbreak + safety phrases, higher confidence bar |
 | `dcl_evaluate_jailbreak` | $0.02 | Instruction-override / jailbreak detection |
 | `dcl_evaluate_safety` | $0.01 | Baseline safety check |
 | `dcl_evaluate_quality` | $0.03 | Content quality & drift check |
@@ -15,23 +15,23 @@
 Prices are set server-side and may change; the MCP tool descriptions returned
 by the server at call time are always the source of truth.
 
-> **Note (ClawHub listing):** this table is a literal per-call price list.
-> ClawHub's skill-format policy states it does not support paid skills or
-> per-skill pricing and that pricing metadata does not belong in SKILL.md.
-> ClawHub's publish flow accepted this content as-is, but that doesn't
-> guarantee it stays that way on a future re-scan/policy pass — see
-> `docs/licensing.md` at the repo root. Consider keeping this exact table
-> only in this `references/` file (loaded on demand) rather than the main
-> `SKILL.md` body if you want to reduce how prominently it reads as pricing
-> in the primary listing view.
+> **Note (ClawHub listing):** confirmed against ClawHub's own skill-format
+> docs — pricing metadata is disallowed in YAML frontmatter, but documenting
+> the external cost of a paid third-party service in the skill's own
+> instructions (like this table) is explicitly permitted. No frontmatter
+> field carries a price anywhere in this skill, so this table is compliant
+> as-is. See `docs/licensing.md` at the repo root for the source citation.
 
 ## Note on policy selection
 
-`dcl_evaluate_fast` and `dcl_evaluate_strict` always run the server's
-**default** policy — they do not take a `policy` parameter. To target a
-specific concern, call the matching tool directly (`dcl_evaluate_jailbreak`,
-`dcl_evaluate_safety`, `dcl_evaluate_quality`), or use `dcl_evaluate_batch`,
-where each item may carry its own `policy` string.
+Each tool runs a distinct built-in policy, not just a price tier of the same
+check. `dcl_evaluate_fast` and `dcl_evaluate_strict` both use general-purpose
+policies but differ in coverage and confidence bar; `dcl_evaluate_jailbreak`,
+`dcl_evaluate_safety`, and `dcl_evaluate_quality` are narrower, single-concern
+checks. None of the single-item tools take a `policy` parameter — to target a
+specific policy per item, use `dcl_evaluate_batch`, where each item may carry
+its own `policy` string (`default`, `strict`, `anti_jailbreak`, `safety`, or
+`content_quality`).
 
 ## Connecting to the live server
 

@@ -15,7 +15,7 @@ description: >
 
 # DCL Policy Enforcer — Leibniz Layer
 
-**Publisher:** Fronesis Labs · **Version:** 3.0.0 · **Part of:** Leibniz Layer Security Suite
+**Publisher:** Fronesis Labs · **Version:** 3.1.0 · **Part of:** Leibniz Layer Security Suite
 **MCP endpoint:** `https://mcp.fronesislabs.com/mcp`
 
 ## What this skill does
