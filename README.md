@@ -1,9 +1,24 @@
 # DCL Skills
 
-Compliance and security skills for AI agents — hallucination detection, PII redaction,
-prompt-injection defense, secret-leak detection, and a DeFi/crypto-specialized variant set.
+**Don't trust the agent. Trust the proof.**
 
-Published on [ClawHub](https://clawhub.ai/daririnch) under [@daririnch](https://clawhub.ai/daririnch).
+Compliance and security skills for AI agents — hallucination detection,
+PII redaction, prompt-injection defense, secret-leak detection, and a
+DeFi-specialized variant set for agents that touch wallets and on-chain
+actions.
+
+Published on [ClawHub](https://clawhub.ai/daririnch) under
+[@daririnch](https://clawhub.ai/daririnch).
+
+## Why This Exists
+
+An agent that can act autonomously is also an agent that can be tricked,
+drift off its instructions, or leak something it shouldn't — silently,
+with no record. These skills give an agent (or the pipeline running it) a
+way to check itself *before* acting and to leave a verifiable trail of what
+it checked. Most skills work two ways: a free, instruction-only checklist
+you can run yourself right now, and an optional live audit backed by the
+DCL Trust Oracle for a cryptographically verifiable verdict.
 
 ## Structure
 
@@ -45,16 +60,17 @@ dcl-skills/
 | `dcl-output-sanitizer` | Sanitize agent output before display/execution |
 | `dcl-crypto-commit` | Final compliance checkpoint before irreversible on-chain action |
 
-## Paid audit (x402)
+## Free by Default, Verifiable if You Need It
 
-Most skills offer a real, paid live check via an x402 MCP server (USDC on
-Base) — jailbreak/injection detection, PII/secret scans, MEV/trade
-compliance, wallet-data protection, and more — each with a free
-instruction-only checklist fallback when payment/auth isn't available or
-you'd rather not make a network call. `dcl-crypto-commit` is the one
-exception with no free equivalent, since its whole purpose is writing to
-the on-chain audit chain. `dcl-provenance-tracker` and
-`dcl-provenance-tracker-crypto` are the other exception — 100%
+Every skill runs standalone as a free, instruction-only checklist — no
+account, no network call, no dependency on Fronesis Labs infrastructure.
+Most also offer an optional live check against the DCL Trust Oracle for a
+cryptographically sealed, tamper-evident verdict instead of a self-reported
+one, metered per call (settled automatically via x402, USDC on Base) so
+there's no subscription to manage for occasional or high-volume use.
+`dcl-crypto-commit` is the one skill with no free equivalent, since its
+whole purpose is writing to the on-chain audit chain. `dcl-provenance-tracker`
+and `dcl-provenance-tracker-crypto` are the opposite case — 100%
 instruction-only by design, with only an *optional* on-chain cross-check of
 a prior record. See each skill's `SKILL.md` for details.
 
@@ -70,7 +86,9 @@ started from thin ClawHub listings).
 ## License
 
 - **This repo**: Apache License 2.0 — see [LICENSE](LICENSE).
-- **ClawHub listings**: platform-enforced MIT-0, cannot be overridden per skill.
+- **ClawHub listings**: platform-enforced MIT-0, cannot be overridden per
+  skill.
 
-See [docs/licensing.md](docs/licensing.md) for the full breakdown, including
-an open item on x402/paid-audit wording vs ClawHub's no-pricing-metadata rule.
+See [docs/licensing.md](docs/licensing.md) for the full breakdown,
+including an open item on x402/paid-audit wording vs ClawHub's
+no-pricing-metadata rule.
